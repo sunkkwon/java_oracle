@@ -9,14 +9,14 @@ import java.util.Vector;
 public class ScoreDAO {
 
 	public Vector listScore() {
-		Vector items = new Vector();
+		Vector items = new Vector(); // vector 는 table 과 맞는다
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		try {
 			conn = DB.oraConn();
-			String sql = "select student_no, name, kor, eng, mat, (kor+eng+mat) as tot, round((kor+eng+mat)/3.0,1) as avg from score";
+			String sql = "select student_no, name, kor, eng, mat, (kor+eng+mat) as tot, round((kor+eng+mat)/3.0,1) as avg from score order by student_no";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
@@ -39,7 +39,6 @@ public class ScoreDAO {
 				row.add(avg);
 
 				items.add(row);
-
 			}
 
 		} catch (Exception e) {
@@ -50,23 +49,15 @@ public class ScoreDAO {
 				if (rs != null) {
 					rs.close();
 				}
-				try {
-					if (pstmt != null) {
-						pstmt.close();
-					}
-					try {
-						if (conn != null) {
-							conn.close();
-						}
-					} catch (Exception e2) {
-						// TODO: handle exception
-					}
-				} catch (Exception e2) {
-					// TODO: handle exception
+				if (pstmt != null) {
+					pstmt.close();
 				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
 			}
 		}
 		return items;
@@ -110,19 +101,70 @@ public class ScoreDAO {
 	}
 
 	public int updateScore(ScoreDTO dto) {
-		int results = 0;
+		int result = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
 		try {
-			
+			conn = DB.oraConn();
+			String sql = "update score set name=?, kor=?, eng=?, mat=? where student_no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getName());
+			pstmt.setInt(2, dto.getKor());
+			pstmt.setInt(3, dto.getEng());
+			pstmt.setInt(4, dto.getMat());
+			pstmt.setString(5, dto.getStudent_no());
+//			pstmt.setInt(2,Integer.valueOf(dto.getKor()));
+
+			result = pstmt.executeUpdate();
+
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception e2) {
+				// TODO: handle exception
+			}
 
 		}
-		;
+		return result;
+	}
 
-		return results;
+	public int deleteScore(String student_no) {
+		int result = 0;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = DB.oraConn();
+			String sql = "delete from score where student_no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, student_no);
+
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}
+		return result;
 	}
 }

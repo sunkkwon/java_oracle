@@ -20,6 +20,7 @@ public class SaveScore extends JFrame {
 	private JTextField tfKor;
 	private JTextField tfName;
 	private JTextField tfStudentNo;
+	private JButton btnExit;
 
 	/**
 	 * Launch the application.
@@ -111,7 +112,16 @@ public class SaveScore extends JFrame {
 				dispose();	// 현재창 종료
 			}
 		});
-		btnSave.setBounds(70, 168, 93, 23);
+		btnSave.setBounds(27, 168, 93, 23);
 		contentPane.add(btnSave);
+		
+		btnExit = new JButton("종료");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnExit.setBounds(125, 168, 69, 23);
+		contentPane.add(btnExit);
 	}
 }

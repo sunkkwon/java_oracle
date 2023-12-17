@@ -9,6 +9,7 @@ public class DB {
 	public static Connection oraConn() {
 		Connection conn = null;
 		try {
+			// 파일에서 1바이트씩 읽어온다
 			FileInputStream fis = new FileInputStream("C:\\workspaces\\oracle.prop");
 			Properties prop = new Properties();
 			prop.load(fis);

@@ -14,6 +14,8 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class listEmp extends JFrame {
 
@@ -86,6 +88,11 @@ public class listEmp extends JFrame {
 		scrollPane.setViewportView(table);
 
 		JButton btnExit = new JButton("종료");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(1);
+			}
+		});
 		btnExit.setBounds(500, 10, 102, 23);
 		contentPane.add(btnExit);
 		
